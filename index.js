@@ -20,7 +20,7 @@ function register () {
   // Get all our input fields
   email = document.getElementById('email').value
   password = document.getElementById('password').value
-  full_name = document.getElementById('full_name').value
+  user_name = document.getElementById('name').value
 
 
   // Validate input fields
@@ -47,8 +47,6 @@ function register () {
     var user_data = {
       email : email,
       full_name : full_name,
-      favourite_song : favourite_song,
-      milk_before_cereal : milk_before_cereal,
       last_login : Date.now()
     }
 
