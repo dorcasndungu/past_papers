@@ -6,139 +6,97 @@ const firebaseConfig = {
     messagingSenderId: "486653274414",
     appId: "1:486653274414:web:6736de74c6be1baf8332bf",
     measurementId: "G-1348T315VZ"
-  };
+};
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = analytics(app);
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = analytics(app);
 
-  const auth = firebase.auth()
+const auth = firebase.auth()
 const database = firebase.database()
 
 // Set up our register function
-function register () {
-  // Get all our input fields
-  email = document.getElementById('email').value
-  password = document.getElementById('password').value
-  user_name = document.getElementById('name').value
+function register() {
+    // Get all our input fields
+    email = document.getElementById('email').value
+    password = document.getElementById('password').value
+    user_name = document.getElementById('name').value
 
-
-  // Validate input fields
-  if (validate_email(email) == false || validate_password(password) == false) {
-    alert('Email or Password is Outta Line!!')
-    return
-    // Don't continue running the code
-  }
-  if (validate_field(full_name) == false || validate_field(favourite_song) == false || validate_field(milk_before_cereal) == false) {
-    alert('One or More Extra Fields is Outta Line!!')
-    return
-  }
- 
-  // Move on with Auth
-  auth.createUserWithEmailAndPassword(email, password)
-  .then(function() {
-    // Declare user variable
-    var user = auth.currentUser
-
-    // Add this user to Firebase Database
-    var database_ref = database.ref()
-
-    // Create User data
-    var user_data = {
-      email : email,
-      full_name : full_name,
-      last_login : Date.now()
+    // Validate input fields
+    if (!validate_email(email) || !validate_password(password)) {
+        alert('Invalid email or password! Password must be at least 6 characters long.');
+        return;
     }
+   
+    //registration
+    auth.createUserWithEmailAndPassword(email, password)
+    .then(function () {
+        // Declare user variable
+        var user = auth.currentUser
 
-    // Push to Firebase Database
-    database_ref.child('users/' + user.uid).set(user_data)
+        // Add this user to Firebase Database
+        var database_ref = database.ref()
 
-    // DOne
-    alert('User Created!!')
-  })
-  .catch(function(error) {
-    // Firebase will use this to alert of its errors
-    var error_code = error.code
-    var error_message = error.message
+        // Create User data
+        var user_data = {
+            email: email,
+            user_name: user_name,
 
-    alert(error_message)
-  })
-}
+        }
 
-// Set up our login function
-function login () {
-  // Get all our input fields
-  email = document.getElementById('email').value
-  password = document.getElementById('password').value
+        // Push to Firebase Database
+        database_ref.child('users/' + user.uid).set(user_data)
 
-  // Validate input fields
-  if (validate_email(email) == false || validate_password(password) == false) {
-    alert('Email or Password is Outta Line!!')
-    return
-    // Don't continue running the code
-  }
+        // DOne
+        alert('User Created!!')
+        window.location.href = '/home/ubuntu2204/vscode23/pastpapershub/upload.html';
+    })
+    .catch(function (error) {
+        // Firebase will use this to alert of its errors
+        var error_code = error.code
+        var error_message = error.message
 
-  auth.signInWithEmailAndPassword(email, password)
-  .then(function() {
-    // Declare user variable
-    var user = auth.currentUser
+        alert(error_message)
+    })
+// Proceed with login
+auth.signInWithEmailAndPassword(email, password)
+    .then(function () {
+        // Get current user
+        const user = auth.currentUser;
 
-    // Add this user to Firebase Database
-    var database_ref = database.ref()
+        // Update last login time in Firebase Database
+        const database_ref = database.ref();
+        const user_data = {
+            last_login: Date.now()
+        };
 
-    // Create User data
-    var user_data = {
-      last_login : Date.now()
-    }
+        database_ref.child('users/' + user.uid).update(user_data);
 
-    // Push to Firebase Database
-    database_ref.child('users/' + user.uid).update(user_data)
+        // Success
+        alert('User logged in successfully!');
+    })
+    .catch(function (error) {
+        // Firebase error handling
+        const error_code = error.code;
+        const error_message = error.message;
 
-    // DOne
-    alert('User Logged In!!')
-
-  })
-  .catch(function(error) {
-    // Firebase will use this to alert of its errors
-    var error_code = error.code
-    var error_message = error.message
-
-    alert(error_message)
-  })
-}
+        alert(`Login failed. Error: ${error_message}`);
+    });
 
 
-
-
-// Validate Functions
+// Validation functions
 function validate_email(email) {
-  expression = /^[^@]+@\w+(\.\w+)+\w$/
-  if (expression.test(email) == true) {
-    // Email is good
-    return true
-  } else {
-    // Email is not good
-    return false
-  }
+    const expression = /^[^@]+@\w+(\.\w+)+\w$/;
+    return expression.test(email);
 }
 
 function validate_password(password) {
-  // Firebase only accepts lengths greater than 6
-  if (password < 6) {
-    return false
-  } else {
-    return true
-  }
+    return password.length >= 6;
 }
 
 function validate_field(field) {
-  if (field == null) {
-    return false
-  }
-
-  if (field.length <= 0) {
-    return false
-  } else {
-    return true
-  }
+    return field && field.length > 0;
 }
+function validate_password_length(password) {
+    return password.length >= 6;
+}}
