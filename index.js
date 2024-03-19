@@ -8,14 +8,17 @@ const firebaseConfig = {
     appId: "1:486653274414:web:6736de74c6be1baf8332bf",
     measurementId: "G-1348T315VZ"
 };
-
 // Initialize Firebase
 const app = firebase.initializeApp(firebaseConfig);
-const analytics = firebase.analytics(app);
+const analytics = firebase.analytics();
 
-const auth = firebase.auth()
-const database = firebase.database()
+const auth = firebase.auth();
+const database = firebase.database();
 
+function handleCardClick() {
+    // Your onclick function logic here
+    window.location.href = 'signUp.html'; 
+}
 // Set up our register function
 function register() {
     // Get all our input fields
