@@ -31,18 +31,19 @@
     <main class="container mt-4">
         <section class="row">
             <!-- Sample Card -->
-            <div class="card col-md-3 m1-1 mb-2 shadow"> <!-- Added shadow class for card shadow -->
+            <div class="card col-md-3 m1-1 mb-2 shadow" onclick="handleCardClick()"> <!-- Added shadow class for card shadow -->
                 <img src="assets/Screenshot from 2024-02-20 00-19-27.png" class="card-img-top" alt="Past Paper Image">
                
                 <div class="card-body">
                     <p class="card-title lead">APT2022</p>
                     <p class="card-text">Prof Nyete<br>MIDSEM</p>
                 </div>
+                
             </div>
             <!-- Repeat the card structure for more papers -->
         </section>
     </main>
-<!-- firebase -->
+<!-- firebase -->   
 <script src="https://www.gstatic.com/firebasejs/9.6.9/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.9/firebase-auth.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.9/firebase-database.js"></script>
